@@ -1,6 +1,7 @@
 import gradio as gr
 import pandas as pd
 import joblib
+import numpy as np
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
@@ -8,7 +9,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LogisticRegression
 
 # Load the saved full pipeline from the file
-full_pipeline = joblib.load('pipe.pkl')
+full_pipeline = joblib.load('src\pipe.pkl')
 
 # Define the predict function
 def predict(gender, SeniorCitizen, Partner, Dependents, Contract, tenure, MonthlyCharges,
@@ -40,16 +41,22 @@ def predict(gender, SeniorCitizen, Partner, Dependents, Contract, tenure, Monthl
 
 
         # Make predictions using the loaded logistic regression model
-    predictions = full_pipeline.predict(input_data)
+        #predict probabilities
+    predictions = full_pipeline.predict_proba(input_data)
+    #take the index of the maximum probability
+    index=np.argmax(predictions)
+    higher_pred_prob=round((predictions[0][index])*100)
+
 
     #return predictions[0]
-    if predictions[0] == "Yes":
-        return "Churn"
+    print(f'[Info] Predicted probabilities{predictions},{full_pipeline.classes_}')
+    if full_pipeline.classes_[index] == "Yes":
+        return f"This Customer is likely to Churn\nWe are {higher_pred_prob}% confident About this prediction"
     else:
-        return "Not Churn"
-
+        return f"This Customer is Not likely to Churn \nWe are {higher_pred_prob}% confident About this prediction"
+    
 # Setting Gradio App Interface
-with gr.Blocks(css=".gradio-container {background-color: grey}") as demo:
+with gr.Blocks(css=".gradio-container {background-color: }",theme=gr.themes.Base(primary_hue='blue'),title='Uriel') as demo:
     gr.Markdown("# Teleco Customer Churn Prediction #\n*This App allows the user to predict whether a customer will churn or not by entering values in the given fields. Any field left blank takes the default value.*")
     
     # Receiving ALL Input Data here
@@ -106,7 +113,7 @@ with gr.Blocks(css=".gradio-container {background-color: grey}") as demo:
     
     def clear():
         output.value = ""
-        return None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        return 'Predicted values have been reset'
          
     clear_btn = gr.Button("Reset", variant="primary")
     clear_btn.click(fn=clear, inputs=None, outputs=output)
