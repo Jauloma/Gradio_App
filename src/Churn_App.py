@@ -56,7 +56,7 @@ def predict(gender, SeniorCitizen, Partner, Dependents, Contract, tenure, Monthl
         return f"This Customer is Not likely to Churn \nWe are {higher_pred_prob}% confident About this prediction"
     
 # Setting Gradio App Interface
-with gr.Blocks(css=".gradio-container {background-color: }",theme=gr.themes.Base(primary_hue='blue'),title='Uriel') as demo:
+with gr.Blocks(css=".gradio-container {background-color:grey }",theme=gr.themes.Base(primary_hue='blue'),title='Uriel') as demo:
     gr.Markdown("# Teleco Customer Churn Prediction #\n*This App allows the user to predict whether a customer will churn or not by entering values in the given fields. Any field left blank takes the default value.*")
     
     # Receiving ALL Input Data here
