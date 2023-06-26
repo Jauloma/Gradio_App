@@ -26,7 +26,7 @@ To setup and run this project you need to have Python3 installed on your system.
 # Screenshots
 | Churn_App default interface       | Churn_App with output           |
 |-----------------------------------|---------------------------------|
-|                                   |                                 |    
+|![Alt text](Default_UI.png)        |![Alt text](UI_with_output.png)  |    
 
 To see the workings of the App, please open the pdf named 'UI Screenshots' which is a pdf document containing the screenshots of the results of the App in action.
 
